@@ -15,4 +15,4 @@ class CustomError extends Error {
     }
 }
 
-export { CustomError }
+export { CustomError}

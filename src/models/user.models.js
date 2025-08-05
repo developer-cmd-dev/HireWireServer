@@ -1,5 +1,7 @@
 import {DataTypes} from 'sequelize'
 import {sequelize} from './sequalize.js'
+import bcrypt from 'bcryptjs';
+
 
 
 const User = sequelize.define("user", {
@@ -19,7 +21,9 @@ const User = sequelize.define("user", {
   email: {
     type: DataTypes.STRING(100),
     allowNull: false,
-    unique: true,
+    unique: {
+      msg:"This email is already registered. Please use a different email.",
+    },
     validate: { isEmail: true }
   },
   password: {
@@ -45,7 +49,23 @@ const User = sequelize.define("user", {
   }
 }, {
   tableName: "user",
-  timestamps: true, // createdAt & updatedAt
-});
+  timestamps: true, 
+  hooks:{
+    beforeCreate:async(user)=>{
+      if(user.password){
+        const salt= await bcrypt.genSalt(10);
+        user.password=await bcrypt.hash(user.password,salt);
+      }
+    },
+    beforeUpdate:async(user)=>{
+         if(user.changed("password")){
+        const salt= await bcrypt.genSalt(10);
+        user.password=await bcrypt.hash(user.password,salt);
+      }
+    }
+  }
+},
+);
+
 
 export default User;
