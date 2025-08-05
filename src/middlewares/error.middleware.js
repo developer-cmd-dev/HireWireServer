@@ -9,7 +9,7 @@ const errorHandler =(err,req,res,next)=>{
             errors:err.errors,
             stack:err.stack
         })
-    }else if(  err.name === "SequelizeUniqueConstraintError") {
+    }else if( err.name === "SequelizeUniqueConstraintError") {
         return res.status(400).json({
             success: false,
             message: err.errors[0].message || "Duplicate value entered"
@@ -18,7 +18,7 @@ const errorHandler =(err,req,res,next)=>{
     else{
     res.status(500).json({
             success:false,
-            message:"Internal server error",
+            message:err.message,
             stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
 
     })

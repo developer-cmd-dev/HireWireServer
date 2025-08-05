@@ -13,7 +13,7 @@ class JwtService{
     }
 
     sign(payload){
-        jwt.sign(payload,this.secret,{expiresIn:this.expiresIn});
+        return jwt.sign({data:payload},this.secret,{expiresIn:this.expiresIn});
     }
 
     verify(token){
