@@ -24,13 +24,14 @@ const User = sequelize.define("user", {
     unique: {
       msg:"This email is already registered. Please use a different email.",
     },
-    validate: { isEmail: true }
+    validate: { isEmail: true },
+    
   },
   password: {
     type: DataTypes.STRING(255),
     allowNull: false
   },
-  role: {
+  role: { 
     type: DataTypes.ENUM("ADMIN", "RECRUITER", "CANDIDATE"),
     defaultValue:"CANDIDATE",
     allowNull: false

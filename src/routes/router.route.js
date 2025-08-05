@@ -9,7 +9,7 @@ const router=Router();
 router.route("/health-check").get(healthController)
 
 router.route("/auth/signup").post(signUp)
-router.route("/auth/login").get(authmiddleware,login)
+router.route("/auth/login").get(login)
 router.route("/auth/getallusers").get(getAllUsers)
 
 

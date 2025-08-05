@@ -1,10 +1,9 @@
-import e from 'express';
+import { useState } from 'react';
 import User from '../models/User.models.js'
 import ApiResponse from '../utils/ApiResponse.js'
 import { asyncHandler } from '../utils/AsyncHandler.js'
 import { CustomError } from '../utils/customError.js';
-
-
+import JwtService from '../service/JwtService.js';
 const getAllUsers = asyncHandler(async (req, res) => {
     const user= await User.findAll({attributes:{exclude:['password','role','createdAt','updatedAt']}});
     res.status(201).json(new ApiResponse(201,user ))
@@ -27,7 +26,17 @@ const signUp = asyncHandler(async (req, res) => {
 })
 
 const login =asyncHandler(async(req,res)=>{
-    res.status(200).json(new ApiResponse(200,"","login successfully"));
+    const{email,password}=req.body;
+    if(!email||!password) throw new CustomError(404,"Invalid Credentials");
+
+    const userdata=await User.findOne({where:{email}});
+    if(!useState) throw new CustomError(401,"User not found");
+
+    const isPasswordCorrect=await bcrypt.compare(password,userdata.password);
+    if(!isPasswordCorrect) throw new CustomError(404,"Wrong Password");
+    const generatetoken=JwtService.sign(userdata.email);
+
+    res.status(200).json(new ApiResponse(200,{accesstoke:generatetoken},"Login successful"))
 })
 
 
