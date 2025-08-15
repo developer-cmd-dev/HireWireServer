@@ -1,6 +1,7 @@
 import {DataTypes} from 'sequelize'
 import {sequelize} from './sequalize.js'
 import bcrypt from 'bcryptjs';
+import RecruiterVerfication from './recruiterverification.model.js';
 
 
 
@@ -68,5 +69,7 @@ const User = sequelize.define("user", {
 },
 );
 
+User.hasOne(RecruiterVerfication,{foreignKey:"useri_d"});
+RecruiterVerfication.belongsTo(User,{foreignKey:"user_id"})
 
 export default User;
